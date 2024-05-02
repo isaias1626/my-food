@@ -26,8 +26,9 @@ const Home = () => {
           sizes="100vw"
           quality={100}
         />
+        
       </div>
-
+      
       <div className="pt-6">
         <ProductList />
       </div>
