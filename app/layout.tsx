@@ -9,7 +9,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'MyFood',
   description:
-    'Os melhores restaurantes',
+    'Os melhores restaurantes'
 }
 
 export default function RootLayout({
@@ -19,6 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
+      <head>
+        <link rel="icon" href="/my-food.svg" />
+      </head>
       <body className={inter.className}>
         {children}
       </body>
