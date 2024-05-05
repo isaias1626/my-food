@@ -12,7 +12,7 @@ const CategoryItem = ({
   return (
     <Link href={`/categories/${category.id}/products`}
     className="flex items-center gap-3 py-2 px-4 bg-white border-primary border-2 rounded-full w-full min-w-fit">
-      <div className="flex items-center">
+      <div className="flex items-center gap-1">
       <Image
         src={category.imageUrl}
         alt={category.name}
