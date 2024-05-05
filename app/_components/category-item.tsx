@@ -9,7 +9,7 @@ const CategoryItem = ({
   category,
 }: CategoryItemProps) => {
   return (
-    <div className="flex  items-center gap-3 py-3 px-4 bg-white shadow-md rounded-full">
+    <div className="flex items-center gap-3 py-2 px-4 bg-white border-primary border-2 rounded-full w-[100%] min-w-fit">
       <Image
         src={category.imageUrl}
         alt={category.name}
