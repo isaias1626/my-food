@@ -1,16 +1,21 @@
 import Image from 'next/image'
 import { Button } from './ui/button'
 import { MenuIcon } from 'lucide-react'
+import Link from 'next/link'
 
 const Header = () => {
   return (
     <div className="flex items-center justify-between px-5 pt-6">
-      <Image
-        src="/my-food.png"
+      <div className="relative h-[30px] w-[70px]">
+        <Link href={"/"}>
+        <Image
+        src="/my-food.svg"
         alt="my food"
-        height={30}
-        width={100}
+          fill
+          className="object-cover"
       />
+        </Link>
+      </div>
       <Button
         size="icon"
         variant="outline"
