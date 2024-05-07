@@ -157,7 +157,7 @@
         >
             <AlertDialogContent>
             <AlertDialogHeader>
-                <AlertDialogTitle>Deseja finalizar seu pedido?</AlertDialogTitle>
+                <AlertDialogTitle>Deseja finalizar o seu pedido?</AlertDialogTitle>
                 <AlertDialogDescription>
                 Ao finalizar seu pedido, você concorda com os termos e condições
                 da nossa plataforma.
