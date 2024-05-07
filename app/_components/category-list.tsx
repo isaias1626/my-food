@@ -1,21 +1,16 @@
-import { db } from '../_lib/prisma'
-import CategoryItem from './category-item'
+import { db } from "../_lib/prisma";
+import CategoryItem from "./category-item";
 
 const CategoryList = async () => {
-  const categories =
-    await db.category.findMany({})
-  //pegar as caterorias do banco de dados
-  //Rederizar um item para cada categoria
+  const categories = await db.category.findMany({});
+
   return (
-    <div className="flex overflow-x-scroll gap-4 [&::-webkit-scrollbar]:hidden px-5">
+    <div className="flex gap-4 overflow-x-scroll px-5 [&::-webkit-scrollbar]:hidden">
       {categories.map((category) => (
-        <CategoryItem
-          key={category.id}
-          category={category}
-        />
+        <CategoryItem key={category.id} category={category} />
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default CategoryList
+export default CategoryList;

@@ -1,51 +1,51 @@
-import { db } from "@/app/_lib/prisma";
-import { notFound } from "next/navigation";
-import ProductImage from "./_components/product-image";
-import ProductDetails from "./_components/product-details";
+    import { db } from "@/app/_lib/prisma";
+    import { notFound } from "next/navigation";
+    import ProductImage from "./_components/product-image";
+    import ProductDetails from "./_components/product-details";
 
-interface ProductPageProp {
+    interface ProductPageProps {
     params: {
-        id: string
+        id: string;
+    };
     }
-}
 
-const ProductPage = async ({ params: { id } }: ProductPageProp) => {
+    const ProductPage = async ({ params: { id } }: ProductPageProps) => {
     const product = await db.product.findUnique({
         where: {
-            id,
+        id,
         },
         include: {
-            restaurant: true,
-        }
+        restaurant: true,
+        },
     });
 
     if (!product) {
-        return notFound()
+        return notFound();
     }
 
     const juices = await db.product.findMany({
         where: {
-            category: {
-                name: "Sucos",
-            },
-            restaurant: {
-                id: product?.restaurant.id
-            }
+        category: {
+            name: "Sucos",
+        },
+        restaurant: {
+            id: product?.restaurant.id,
+        },
         },
         include: {
-            restaurant: true
-        }
-    })
+        restaurant: true,
+        },
+    });
 
-    return ( 
+    return (
         <div>
-            {/*IMAGEM*/}
-            <ProductImage product={product} />
+        {/* IMAGEM */}
+        <ProductImage product={product} />
 
-            {/* TITULO E PREÇO */}
-            <ProductDetails product={product} complementaryProducts={juices} />
+        {/* TITULO E PREÇO */}
+        <ProductDetails product={product} complementaryProducts={juices} />
         </div>
     );
-}
+    };
 
-export default ProductPage;
+    export default ProductPage;

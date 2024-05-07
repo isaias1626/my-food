@@ -186,7 +186,7 @@
             <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>
-                Você só pode adicionar itens do mesmo restaurante
+                Você só pode adicionar itens de um restaurante por vez
                 </AlertDialogTitle>
                 <AlertDialogDescription>
                 Deseja mesmo adicionar esse produto? Isso limpará sua sacola

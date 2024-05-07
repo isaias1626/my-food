@@ -1,57 +1,102 @@
-import { Restaurant } from "@prisma/client";
-import { BikeIcon, HeartIcon, StarIcon, TimerIcon } from "lucide-react";
-import Image from "next/image";
-import { formatCurrency } from "../_helpers/price";
-import { Button } from "./ui/button";
-import Link from "next/link";
-import { cn } from "../_lib/utils";
+    "use client";
 
-interface RestaurantItemProps {
-    restaurant: Restaurant
-    className?: string
-}
+    import { Restaurant, UserFavoriteRestaurant } from "@prisma/client";
+    import { BikeIcon, HeartIcon, StarIcon, TimerIcon } from "lucide-react";
+    import Image from "next/image";
+    import { formatCurrency } from "../_helpers/price";
+    import { Button } from "./ui/button";
+    import Link from "next/link";
+    import { cn } from "../_lib/utils";
+    import { toggleFavoriteRestaurant } from "../_actions/restaurant";
+    import { toast } from "sonner";
+    import { useSession } from "next-auth/react";
 
-const RestaurantItem = ({restaurant, className} :RestaurantItemProps) => {
-    return ( 
-        <Link className={cn("min-w-[266px] max-w-[266px]", className)} href={`/restaurants/${restaurant.id}`}>
-            <div className="w-full space-y-3">
-                {/*Imagem*/}
-                <div className="w-full h-[136px] relative">
-                    <Image src={restaurant.imageUrl} fill className="object-cover rounded-lg" alt={restaurant.name} />
-                    
-                    <div className="gap-[2px] flex items-center absolute top-2 left-2 bg-white rounded-full py-[2px] px-2">
-                        <StarIcon size={12} className="fill-yellow-500 text-yellow-400"/>
-                        <span className='font-semibold text-xs'>5.0</span>
-                    </div>
+    interface RestaurantItemProps {
+    restaurant: Restaurant;
+    className?: string;
+    userFavoriteRestaurants: UserFavoriteRestaurant[];
+    }
 
-                    <Button className="absolute top-2 right-2 bg-gray-700 rounded-full w-7 h-7"
-                    size="icon" >
-                        <HeartIcon className=" fill-white" size={16} />
-                    </Button>
+    const RestaurantItem = ({
+    restaurant,
+    className,
+    userFavoriteRestaurants,
+    }: RestaurantItemProps) => {
+    const { data } = useSession();
+    const isFavorite = userFavoriteRestaurants.some(
+        (fav) => fav.restaurantId === restaurant.id,
+    );
+
+    const handleFavoriteClick = async () => {
+        if (!data?.user.id) return;
+        try {
+        await toggleFavoriteRestaurant(data?.user.id, restaurant.id);
+        toast.success(
+            isFavorite
+            ? "Restaurante removido dos favoritos."
+            : "Restaurante favoritado.",
+        );
+        } catch (error) {
+        toast.error("Erro ao favoritar restaurante.");
+        }
+    };
+
+    return (
+        <div className={cn("min-w-[266px] max-w-[266px]", className)}>
+        <div className="w-full space-y-3">
+            {/* IMAGEM */}
+            <div className="relative h-[136px] w-full">
+            <Link href={`/restaurants/${restaurant.id}`}>
+                <Image
+                src={restaurant.imageUrl}
+                fill
+                sizes="100%"
+                className="rounded-lg object-cover"
+                alt={restaurant.name}
+                />
+            </Link>
+
+            <div className="absolute left-2 top-2 flex items-center gap-[2px] rounded-full bg-primary bg-white px-2 py-[2px]">
+                <StarIcon size={12} className="fill-yellow-400 text-yellow-400" />
+                <span className="text-xs font-semibold">5.0</span>
+            </div>
+
+            {data?.user.id && (
+                <Button
+                size="icon"
+                className={`absolute right-2 top-2 h-7 w-7 rounded-full bg-gray-700 ${isFavorite && "bg-primary hover:bg-gray-700"}`}
+                onClick={handleFavoriteClick}
+                >
+                <HeartIcon size={16} className="fill-white" />
+                </Button>
+            )}
+            </div>
+            {/* TEXTO */}
+            <div>
+            <h3 className="text-sm font-semibold">{restaurant.name}</h3>
+            {/* INFORMAÇÕES DA ENTREGA */}
+            <div className="flex gap-3">
+                {/* CUSTO DE ENTREGA */}
+                <div className="flex items-center gap-1">
+                <BikeIcon className="text-primary" size={14} />
+                <span className="text-xs text-muted-foreground">
+                    {Number(restaurant.deliveryFee) === 0
+                    ? "Entrega grátis"
+                    : formatCurrency(Number(restaurant.deliveryFee))}
+                </span>
                 </div>
-                {/*Texto*/}
-                <div>
-                    <h3 className="font-semibold text-sm">{restaurant.name}</h3>
-                    <div className="flex gap-3">
-                        {/*Custo de Entrega*/}
-                        <div className="flex gap-1 items-center">
-                            <BikeIcon className="text-primary" size={14} />
-                            <span className="text-xs text-muted-foreground">{Number(restaurant.deliveryFee) === 0 ? "Entrega Grátis"
-                                : formatCurrency(Number(restaurant.deliveryFee))}</span>
-                        </div>
-
-                        {/*Tempo de entrega*/}
-                        <div className="flex gap-1 items-center">
-                            <TimerIcon className="text-primary" size={14} />
-                            <span className="text-xs text-muted-foreground">
-                                {restaurant.deliveryTimeMinutes}min
-                            </span>
-                        </div>
-                    </div>
+                {/* TEMPO DE ENTREGA */}
+                <div className="flex items-center gap-1">
+                <TimerIcon className="text-primary" size={14} />
+                <span className="text-xs text-muted-foreground">
+                    {restaurant.deliveryTimeMinutes} min
+                </span>
                 </div>
             </div>
-        </Link>
+            </div>
+        </div>
+        </div>
     );
-}
+    };
 
-export default RestaurantItem;
+    export default RestaurantItem;

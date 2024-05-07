@@ -10,7 +10,7 @@ import RestaurantList from './_components/restaurant-list'
 import Link from 'next/link'
 
 const Home = async () => {
-  const products = await db .product.findMany({
+  const products = await db.product.findMany({
     where: {
       discountPercentage: {
         gt: 0,
